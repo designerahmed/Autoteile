@@ -21,13 +21,13 @@
     }
     #flipbook {
       width: 40.6vw;   /* كتاب كامل (صفحتين ≈ 780px على شاشة 1920) */
-      height: 90vh;    /* 90% من ارتفاع الشاشة */
+      height: 50vh;    /* أقصر بـ45% */
       box-shadow: 0 0 20px rgba(0,0,0,0.3);
       background: white;
     }
     .page {
-      width: 20.3vw;   /* صفحة واحدة ≈ 390px على شاشة 1920 */
-      height: 90vh;
+      width: 20.3vw;   /* صفحة ≈ 390px على شاشة 1920 */
+      height: 50vh;    /* أقصر بـ45% */
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -58,12 +58,12 @@
 
   <script>
     function resizeFlipbook() {
-      $("#flipbook").turn("size", window.innerWidth * 0.406, window.innerHeight * 0.9);
+      $("#flipbook").turn("size", window.innerWidth * 0.406, window.innerHeight * 0.5);
     }
 
     $("#flipbook").turn({
       width: window.innerWidth * 0.406,   // كتاب ≈ 780px على شاشة 1920
-      height: window.innerHeight * 0.9,   // 90% من الارتفاع
+      height: window.innerHeight * 0.5,   // أقصر بـ45%
       autoCenter: true,
       elevation: 50,
       gradients: true
