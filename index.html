@@ -1,172 +1,77 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Catalogue</title>
+  <meta charset="utf-8">
+  <title>Catalogue Filtre à Huile</title>
 
-  <!-- jQuery + Turn.js -->
+  <!-- jQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/turn.js@4/turn.min.js"></script>
+  <!-- Turn.js محلي -->
+  <script src="js/turn.min.js"></script>
 
   <style>
     body {
       margin: 0;
-      background: #f0f0f0;
-      font-family: Arial, sans-serif;
+      background: #e6e6e6;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      padding: 10px;
+      height: 100vh;
+      overflow: hidden;
     }
-
-    /* flipbook */
     #flipbook {
-      width: 40.6vw;
-      height: 50vh;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      width: 40.6vw;   /* كتاب كامل (صفحتين ≈ 780px على شاشة 1920) */
+      height: 50vh;    /* أقصر بـ45% */
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
       background: white;
-      margin-bottom: 15px;
     }
     .page {
-      width: 20.3vw;
-      height: 50vh;
+      width: 20.3vw;   /* صفحة ≈ 390px على شاشة 1920 */
+      height: 50vh;    /* أقصر بـ45% */
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      background-color: #fff;
-    }
-
-    /* thumbnails */
-    .thumbs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      justify-content: center;
-    }
-    .thumbs img {
-      width: 100px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .thumbs img:hover {
-      transform: scale(1.05);
-      border-color: #999;
-    }
-
-    /* responsive mobile */
-    @media (max-width: 768px) {
-      #flipbook {
-        width: 95vw !important;
-        height: 70vh !important;
-      }
-      .page {
-        width: 95vw !important;
-        height: 70vh !important;
-      }
-      .thumbs img { width: 70px; }
     }
   </style>
 </head>
 <body>
-
-  <!-- الكتالوج -->
-  <div id="flipbook"></div>
-
-  <!-- المصغرات -->
-  <div class="thumbs" id="thumbsPanel"></div>
+  <div id="flipbook">
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-01.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-02.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-03.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-04.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-05.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-06.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-07.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-08.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-09.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-10.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-11.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-12.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-13.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-14.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-15.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-16.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-17.jpg')"></div>
+    <div class="page" style="background-image:url('pdf_pages/Fiche technique-18.jpg')"></div>
+  </div>
 
   <script>
-    const PAGE_COUNT = 18; // عدد الصفحات
-    const pageFiles = [];
-    for (let i = 1; i <= PAGE_COUNT; i++) {
-      const n = String(i).padStart(2, '0');
-      pageFiles.push(`pdf_pages/Fiche technique-${n}.jpg`);
+    function resizeFlipbook() {
+      $("#flipbook").turn("size", window.innerWidth * 0.406, window.innerHeight * 0.5);
     }
 
-    const $flipbook = $("#flipbook");
-
-    // أضف الصفحات كـ div مع data-src (lazy load)
-    pageFiles.forEach((src, idx) => {
-      $flipbook.append(`<div class="page" data-src="${src}" data-page="${idx + 1}"></div>`);
+    $("#flipbook").turn({
+      width: window.innerWidth * 0.406,   // كتاب ≈ 780px على شاشة 1920
+      height: window.innerHeight * 0.5,   // أقصر بـ45%
+      autoCenter: true,
+      elevation: 50,
+      gradients: true
     });
 
-    // المصغرات
-    const $thumbs = $("#thumbsPanel");
-    pageFiles.forEach((src, idx) => {
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = `Page ${idx + 1}`;
-      img.addEventListener("click", () => {
-        $flipbook.turn("page", idx + 1);
-      });
-      $thumbs.append(img);
-    });
-
-    // lazy-load للصفحات
-    function lazyLoad() {
-      const pages = document.querySelectorAll(".page");
-      if ("IntersectionObserver" in window) {
-        const io = new IntersectionObserver((entries, observer) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const el = entry.target;
-              const src = el.getAttribute("data-src");
-              if (src) {
-                const img = new Image();
-                img.onload = () => {
-                  el.style.backgroundImage = `url("${src}")`;
-                  el.removeAttribute("data-src");
-                };
-                img.src = src;
-              }
-              observer.unobserve(el);
-            }
-          });
-        }, { rootMargin: "200px" });
-        pages.forEach(p => io.observe(p));
-      } else {
-        // fallback لو المتصفح قديم
-        pages.forEach(p => {
-          const src = p.getAttribute("data-src");
-          if (src) {
-            p.style.backgroundImage = `url("${src}")`;
-            p.removeAttribute("data-src");
-          }
-        });
-      }
-    }
-
-    // تهيئة flipbook
-    function initFlipbook() {
-      const isMobile = window.innerWidth <= 768;
-      $flipbook.turn({
-        width: isMobile ? window.innerWidth * 0.95 : window.innerWidth * 0.406,
-        height: isMobile ? window.innerHeight * 0.7 : window.innerHeight * 0.5,
-        display: isMobile ? "single" : "double",
-        autoCenter: true,
-        elevation: 50,
-        gradients: true,
-      });
-      lazyLoad();
-    }
-
-    $(document).ready(() => {
-      initFlipbook();
-
-      $(window).resize(() => {
-        const isMobile = window.innerWidth <= 768;
-        try {
-          $flipbook.turn(
-            "size",
-            isMobile ? window.innerWidth * 0.95 : window.innerWidth * 0.406,
-            isMobile ? window.innerHeight * 0.7 : window.innerHeight * 0.5
-          );
-          $flipbook.turn("display", isMobile ? "single" : "double");
-        } catch (e) {}
-      });
+    // إعادة ضبط الحجم عند تغيير مقاس الشاشة
+    $(window).resize(function() {
+      resizeFlipbook();
     });
   </script>
 </body>
